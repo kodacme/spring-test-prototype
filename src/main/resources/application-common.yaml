@@ -1,0 +1,15 @@
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 10
+
+logging:
+  level:
+    org:
+      springframework: INFO
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  shutdown: graceful

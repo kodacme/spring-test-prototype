@@ -1,21 +1,9 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/dev
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-  lifecycle:
-    timeout-per-shutdown-phase: 10
+  profiles:
+    active: local
+    group:
+      local:
+        - common
+        - local
+    default: local
 
-logging:
-  level:
-    org:
-      springframework: INFO
-
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-
-server:
-  port: 8088
-  shutdown: graceful

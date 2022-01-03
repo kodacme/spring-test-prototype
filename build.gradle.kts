@@ -32,6 +32,8 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
+	testImplementation("com.github.springtestdbunit:spring-test-dbunit:1.3.0")
+	testImplementation("org.dbunit:dbunit:2.7.2")
 }
 
 dependencyManagement {

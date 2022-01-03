@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <fruits id="F001" name="melon" kind="K01" />
+    <fruits id="F002" name="orange" kind="K02" />
+</dataset>
