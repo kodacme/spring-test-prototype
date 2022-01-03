@@ -32,9 +32,8 @@ class DatabaseConfiguration {
     }
 
     @Bean
-    @Profile("test")
     fun dataSource(): DataSource {
-        val container = ContainerHolder.getContainer()
+        val container = ContainerHolder.getInstance()
         val ds = DriverManagerDataSource()
         ds.apply {
             url = container.jdbcUrl

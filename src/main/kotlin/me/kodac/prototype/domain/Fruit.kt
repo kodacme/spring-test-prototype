@@ -7,4 +7,9 @@ class Fruit() {
     var name: String = ""
 
     var kind: String = ""
+
+    override fun toString(): String {
+        return "Fruit(id='$id', name='$name', kind='$kind')"
+    }
+
 }

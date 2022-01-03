@@ -2,4 +2,5 @@
 <dataset>
     <fruits id="F001" name="melon" kind="K01" />
     <fruits id="F002" name="orange" kind="K02" />
+    <producers id="P004" address="東京都" lastname="[null]" firstname="[null]" />
 </dataset>

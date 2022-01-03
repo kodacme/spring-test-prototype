@@ -4,23 +4,22 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.utility.DockerImageName
 
-object ContainerHolder {
+class ContainerHolder private constructor() : PostgreSQLContainer<ContainerHolder>(IMAGE) {
 
-    private val IMAGE: DockerImageName = DockerImageName.parse("postgres:14")
+    companion object {
+        private val IMAGE: DockerImageName = DockerImageName.parse("postgres:14")
+        private var container: ContainerHolder? = null
 
-    @Container
-    private val POSTGRES_CONTAINER: PostgreSQLContainer<*> = PostgreSQLContainer<PostgreSQLContainer<*>>(IMAGE)
-        .withDatabaseName("dev")
-        .withUsername("postgres")
-        .withPassword("postgres")
-        .withExposedPorts(5432)
-        .withEnv("POSTGRES_INITDB_ARGS", "--encoding=UTF-8 --locale=C")
-
-    init {
-        POSTGRES_CONTAINER.start()
+        fun getInstance(): ContainerHolder {
+            return container ?: ContainerHolder()
+        }
     }
 
-    fun getContainer(): PostgreSQLContainer<*> {
-        return POSTGRES_CONTAINER
+    init {
+        start()
+    }
+
+    override fun stop() {
+        // do nothing
     }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <fruits id="F001" name="melon" />
+    <fruits id="F002" name="orange" />
+
+    <producers id="P004" address="東京都" lastname="[null]" />
+    <producers id="P001" address="[null]" lastname="山田" />
+</dataset>
