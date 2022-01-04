@@ -8,6 +8,8 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode
 import com.github.springtestdbunit.dataset.ReplacementDataSetLoader
 import me.kodac.prototype.config.DatabaseConfiguration
 import me.kodac.prototype.domain.Producer
+import me.kodac.prototype.listener.WithMockUserListener
+import me.kodac.prototype.security.BearerAuthenticationInterceptor
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -17,11 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import java.nio.file.Files
 import java.nio.file.Path
+import javax.annotation.PostConstruct
 
 @Import(DatabaseConfiguration::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,12 +33,18 @@ import java.nio.file.Path
 @TestExecutionListeners(
     DependencyInjectionTestExecutionListener::class,
     DirtiesContextTestExecutionListener::class,
-    TransactionDbUnitTestExecutionListener::class
+    TransactionDbUnitTestExecutionListener::class,
+    WithMockUserListener::class
 )
 class SampleApiTest {
 
     @Autowired
     lateinit var restTemplate: TestRestTemplate
+
+    @PostConstruct
+    fun initialize() {
+        restTemplate.restTemplate.interceptors = listOf(BearerAuthenticationInterceptor())
+    }
 
     @Test
     @DatabaseSetup("/dbunit/sample-api/setup_01.xml")
@@ -69,6 +79,29 @@ class SampleApiTest {
             JSONCompareMode.STRICT
         )
     }
+
+    @Test
+    @DatabaseSetup("/dbunit/sample-api/setup_02.xml")
+    @WithMockUser(username = "user_1", password = "sample")
+    fun test03() {
+        val res = restTemplate.getForEntity("/users/me", String::class.java)
+
+        assertEquals(HttpStatus.OK, res.statusCode)
+        JSONAssert.assertEquals(
+            content("/api-result/sample-api/result_03.json"),
+            res.body,
+            JSONCompareMode.STRICT
+        )
+    }
+
+    @Test
+    @DatabaseSetup("/dbunit/sample-api/setup_02.xml")
+    fun test04() {
+        val res = restTemplate.getForEntity("/users/me", String::class.java)
+
+        assertEquals(HttpStatus.UNAUTHORIZED, res.statusCode)
+    }
+
 
     private fun content(path: String): String {
         val s = if (path.startsWith("/")) path else "/$path"

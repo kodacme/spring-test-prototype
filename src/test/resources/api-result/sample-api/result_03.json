@@ -1,0 +1,9 @@
+{
+  "username": "user_1",
+  "authorities": [
+    {
+      "authority": "ROLE_USER"
+    }
+  ],
+  "enabled": true
+}
